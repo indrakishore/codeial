@@ -8,10 +8,12 @@ const router = express.Router();
 
 // how to access it.
 const homeController = require('../controllers/home_controller');
+const usersController = require('../controllers/users_controller');
 
 module.exports = router;
 //access 
 router.get('/', homeController.home);
+router.get('/profile', usersController.profile);
 router.use('/users', require('./users'));
 
 //for any further routes, access from here
