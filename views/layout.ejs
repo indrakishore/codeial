@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>
+            <%= title  %>
+        </title>
+        
+        <link rel="stylesheet" href="/css/layout.css">
+        <!-- Whenever called as link or script tag in my body it will automatic put here (head) -->
+        <%- style %>
+        
+    </head>
+
+    <body>
+        <%- include('_header'); %>
+
+        <!-- body contains variable part -->
+        <%- body %> 
+
+
+        <%- include('_footer'); %>
+
+        <%- script %>
+        
+    </body>
+</html>
