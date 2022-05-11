@@ -22,11 +22,11 @@ router.post('/create-session', passport.authenticate(
     {failureRedirect: '/users/sign-in'},
 ), usersController.createSession);
 
-
+router.get('/sign-out', usersController.destroySession);
 
 module.exports = router;
 
-router.use('/users', require('./users'));
+// router.use('/users', require('./users'));
 
 //for any further routes, access from here
 //router.use('/routerName', require('./routerfile'));
