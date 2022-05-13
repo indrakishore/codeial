@@ -46,6 +46,8 @@ const MongoStore = require('connect-mongo');
 //sass-middleware
 const sassMiddleware = require('node-sass-middleware');
 
+// require path
+const path = require('path');
 
 app.use(sassMiddleware({
     src : './assets/scss',
@@ -58,7 +60,8 @@ app.use(sassMiddleware({
 app.use(express.urlencoded());
 app.use(cookieParser());
 
-app.use(express.static('./assets'));
+// app.use(express.static('./assets'));
+app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use(expressLayouts);
 
