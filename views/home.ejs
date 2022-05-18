@@ -1,4 +1,14 @@
+<h1>
+    Codeial / <%= title %>
+</h1>
 
-        <h1>
-            Codeial / <%= title %>
-        </h1>
+<!-- feed post -->
+<section id="feed-posts">
+    <h4>Post</h4>
+    <!-- create a form which corresponds to schema -->
+    <form action="/posts/create" id="new-post-form" method="POST">
+        <textarea name="content" cols="30" rows="3" placeholder="Type here..."></textarea>
+        <input type="submit" value="Post">
+    </form>
+</section>
+      

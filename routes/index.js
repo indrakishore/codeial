@@ -15,6 +15,7 @@ module.exports = router;
 router.get('/', homeController.home);
 router.get('/profile', usersController.profile);
 router.use('/users', require('./users'));
+router.use('/posts', require('./posts'));//require post route
 
 //for any further routes, access from here
 //router.use('/routerName', require('./routerfile'));

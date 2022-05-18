@@ -27,7 +27,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const port = 8006;
+const port = 8000;
 
 //require express js layout library
 const expressLayouts = require('express-ejs-layouts');
@@ -39,6 +39,8 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const bodyParser = require('body-parser');
+
 
 // MongoStore
 const MongoStore = require('connect-mongo');
@@ -57,7 +59,8 @@ app.use(sassMiddleware({
     prefix : '/css'
 }));
 
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded({extended : false}));
+
 app.use(cookieParser());
 
 // app.use(express.static('./assets'));
@@ -76,7 +79,6 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 //mongostore is used to store the cookie
-
 app.use(session({
     name: 'codeial',
     // TODO change the secret before deployment in production mode
@@ -84,7 +86,8 @@ app.use(session({
     saveUninitialized : false,
     resave: false,
     cookie : {
-        maxAge : (1000 * 60 * 100) //in milisecond
+        maxAge : (1000 * 60 * 100), //in milisecond
+        autoRemove : 'disabled'
     },
     // add new key
     // store : new MongoStore ({
@@ -115,5 +118,7 @@ app.listen(port, function(err){
         console.log(`Error in running the server: ${err}`);
     }
 
-    console.log(`Server is running on port: ${port}`);
+    console.log(`Server is running at: http://127.0.0.1:8000/`);
+    
+    
 });
