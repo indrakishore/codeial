@@ -1,28 +1,3 @@
-// const express = require('express');
-// const { path } = require('express/lib/application');
-// const app = express();
-
-// const port = 8001;
-
-// //use express router
-// app.use('/', require('./routes'))
-
-// //set up the view engine
-// app.set('view engine', 'ejs');
-// app.set('views', './views')
-
-
-// app.listen(port, function(err){
-//     if(err){
-//         // console.log('Error ', err);
-//         // Interpolation
-//         console.log(`Error in running the server: ${err}`);
-//     }
-
-//     console.log(`Server is running on the port: ${port}`);
-// });
-
-// File Structure onwards
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
@@ -67,6 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use(expressLayouts);
+
 
 // extract style and scripts from sub pages into the layout
 app.set('layout extractStyles', true);
@@ -122,3 +98,40 @@ app.listen(port, function(err){
     
     
 });
+
+
+
+
+
+
+
+
+
+
+
+
+// const express = require('express');
+// const { path } = require('express/lib/application');
+// const app = express();
+
+// const port = 8001;
+
+// //use express router
+// app.use('/', require('./routes'))
+
+// //set up the view engine
+// app.set('view engine', 'ejs');
+// app.set('views', './views')
+
+
+// app.listen(port, function(err){
+//     if(err){
+//         // console.log('Error ', err);
+//         // Interpolation
+//         console.log(`Error in running the server: ${err}`);
+//     }
+
+//     console.log(`Server is running on the port: ${port}`);
+// });
+
+// File Structure onwards

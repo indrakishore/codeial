@@ -1,6 +1,6 @@
 //exports a function which is publically available in route files
 //commented bcz something sent directly from the browser
-const { populate } = require('../models/post');
+// const { populate } = require('../models/post');
 const Post = require('../models/post');
  
 module.exports.home = function(req, res){
@@ -19,7 +19,15 @@ module.exports.home = function(req, res){
     // });
 
     // populate the user of each post
-    Post.find({}).populate('user').exec(function(err, posts){
+    Post.find({})
+    .populate('user')
+    .populate({
+        path: 'comments',
+        populate:{          //populate further
+            path: 'user'
+        }
+    })
+    .exec(function(err, posts){
         return res.render('home', {
             title : "codeial | Home",
             posts : posts,
@@ -28,6 +36,24 @@ module.exports.home = function(req, res){
 };
 
 
-// module.exports.actionName = function(req, res){
-    
-// }
+// Post.find({})
+//       .populate([{
+//           path: 'user',
+//         //   model: 'User'
+//       }, {
+//         path: 'comments',
+//         // model: 'Comment',
+//         populate: {
+//             path: 'user',
+//             // model: 'User'
+//         }
+//       }])
+//       .exec(function(err, posts){
+//         return res.render('home', {
+//             title: "Codeial | home",
+//             posts: posts
+//         });
+//     });
+// };
+
+// module.exports.actionName = function(req, res){}

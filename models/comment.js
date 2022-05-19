@@ -18,7 +18,7 @@ const commnetSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Comment = mongoose.model('comment', commnetSchema);
+const Comment = mongoose.model('Comment', commnetSchema);
 module.exports = Comment;
 
 // Now we need to change in post schema
