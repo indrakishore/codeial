@@ -6,9 +6,25 @@ const User = require('../models/user');
 
 module.exports.profile = function(req, res){
     // return res.end('<h1> Express is up for codeial! </h1>');
-    return res.render('profile', {
-        title : "profile"
+    User.findById(req.params.id, function(err, user){
+        // send user to frontend
+        return res.render('user_profile', {
+            title : "User Profile",
+            profile_user : user
+        });
     });
+    
+}
+
+module.exports.update = function(req, res){
+    // if current looged in user
+    if(req.user.id == req.params.id){
+        User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
+            return res.redirect('back');
+        });
+    }else{
+        return res.status(401).send('Unauthorised');
+    }
 }
 
 // Actions

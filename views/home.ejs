@@ -1,30 +1,45 @@
-<h1>
+<!-- <h1>
     Codeial / <%= title %>
-</h1>
+</h1> -->
 
-<!-- feed post -->
-<section id="feed-posts">
-    <h4>Post</h4>
-    
-    <% 
-       if(locals.user){
-           %> 
-             <!-- create a form which corresponds to schema -->
-        <form action="/posts/create" id="new-post-form" method="POST">
-            <textarea name="content" cols="30" rows="3" placeholder="Type here..."></textarea>
-            <input type="submit" value="Post">
-        </form>     
-           <%
-       }
-    %>
+<link rel="stylesheet" href="/css/home.css">
 
-    <!-- Showing post -->
-    <div id="posts-list-container">
-        <ul>
-            <% for(post of posts){ %>
-                <%- include('_post') -%>
+<div id="home-container">
+    <!-- feed post -->
+    <section id="feed-posts">
+        <h4>Post</h4>
+
+        <% if(locals.user){ %>
+            <!-- create a form which corresponds to schema -->
+            <form action="/posts/create" id="new-post-form" method="POST">
+                <textarea name="content" cols="30" rows="3" placeholder="Type here..."></textarea>
+                <input type="submit" value="Post">
+            </form>
             <% } %>
-        </ul>
-    </div>
-</section>
-      
+
+                <!-- Showing post -->
+                <div id="posts-list-container">
+                    <ul>
+                        <% for(post of posts){ %>
+                            <%- include('_post') -%>
+                                <% } %>
+                    </ul>
+                </div>
+    </section>
+
+    <!-- Divide the home page into three sections -->
+    <section id="user-friends">
+        <h4>Friends</h4>
+        <% for(u of all_users) {%>
+            <p>
+                <!-- display the name of users -->
+                <a href="/users/profile/<%= u.id %>">
+                    <%= u.name %>
+                </a>
+            </p>
+            <% } %>
+    </section>
+</div>
+
+<!-- got to route and change the profile -->
+<!-- then user_controller- profile -->

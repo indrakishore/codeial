@@ -7,7 +7,8 @@ const passport = require('passport');
 
 // router.get('/profile', usersController.profile);
 // Users profile make accessible only when user is signed in
-router.get('/profile', passport.checkAuthentication, usersController.profile);
+router.get('/profile/:id', passport.checkAuthentication, usersController.profile);
+router.post('/update/:id', passport.checkAuthentication, usersController.update); //since data is being updated into database
 
 
 //routed signIn and signUp pages
