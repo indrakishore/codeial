@@ -3,8 +3,38 @@
 // const { populate } = require('../models/post');
 const Post = require('../models/post');
 const User = require('../models/user');
+
+// optimise using async await
+// finding the post and executing the query then in the callback finding the user and inside the callback users will find
+// then returning to the browser the list of all users and posts along with title
+module.exports.home = async function(req, res){
+
+    //handle error using try catch
+    try{
+        let posts = await Post.find({})
+        .populate('user')
+        .populate({
+            path: 'comments',
+            populate:{          //populate further
+                path: 'user'
+            }
+        });
+        // once this post part gets executed then this users part get exexuted
+        let users = await User.find({});
+        //then return something to the browser
+        return res.render('home', {
+            title: "Codeial | home",
+            posts: posts,
+            all_users : users
+        });
+
+    }catch(err){
+        console.log('Error', err);
+        return;
+    }
+};
  
-module.exports.home = function(req, res){
+// module.exports.home = function(req, res){
     // return res.end('<h1> Express is up for codeial! </h1>');
     // console.log(req.cookies);
     // cookies going back as response
@@ -20,25 +50,25 @@ module.exports.home = function(req, res){
     // });
 
     // populate the user of each post
-    Post.find({})
-    .populate('user')
-    .populate({
-        path: 'comments',
-        populate:{          //populate further
-            path: 'user'
-        }
-    })
-    .exec(function(err, posts){
-        User.find({}, function(err, users){
-            return res.render('home', {
-                title : "codeial | Home",
-                posts : posts,
-                all_users: users
-            });
-        });
+    // Post.find({})
+    // .populate('user')
+    // .populate({
+    //     path: 'comments',
+    //     populate:{          //populate further
+    //         path: 'user'
+    //     }
+    // })
+    // .exec(function(err, posts){
+    //     User.find({}, function(err, users){
+    //         return res.render('home', {
+    //             title : "codeial | Home",
+    //             posts : posts,
+    //             all_users: users
+    //         });
+    //     });
        
-    });
-};
+    // });
+// };
 
 
 // Post.find({})
