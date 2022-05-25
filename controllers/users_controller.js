@@ -3,7 +3,7 @@
 //     res.end('<h1>User Profile</h1>');
 // }
 const User = require('../models/user'); 
-
+// let's keep it same as before bcause there is no nexting level just one call back available here.
 module.exports.profile = function(req, res){
     // return res.end('<h1> Express is up for codeial! </h1>');
     User.findById(req.params.id, function(err, user){
