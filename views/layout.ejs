@@ -1,36 +1,65 @@
 <html>
-    <head>
-        <title>
-            <%= title  %>
-        </title>
-        
-        <link rel="stylesheet" href="/css/layout.css">
-        <!-- <link rel="stylesheet" href="/css/user_profile.css"> -->
-        <link rel="stylesheet" href="/css/header.css">
-        <link rel="stylesheet" href="/css/footer.css">
-        <!-- Whenever called as link or script tag in my body it will automatic put here (head) -->
-        <%- style %>
-        
-    </head>
 
-    <body>
-        <%- include('_header'); %>
+<head>
+    <title>
+        <%= title %>
+    </title>
 
-        <% if(flash.success && flash.success.length > 0) { %>
+    <link rel="stylesheet" href="/css/layout.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+    <!-- <link rel="stylesheet" href="/css/user_profile.css"> -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <!-- Whenever called as link or script tag in my body it will automatic put here (head) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+    <%- style %>
+
+
+</head>
+
+<body>
+    <%- include('_header'); %>
+
+        <!-- <% if(flash.success && flash.success.length> 0) { %>
             <h5>
                 <%= flash.success %>
             </h5>
-            
-           <% } %>
+
+            <% } %> -->
         <main id="layout-main">
             <!-- body contains variable part -->
-            <%- body %> 
+            <%- body %>
         </main>
 
 
         <%- include('_footer'); %>
 
-        <%- script %>
-        
-    </body>
+            <%- script %>
+                <script>
+                    <% if (flash.success && flash.success.length > 0) { %>
+                        new Noty({
+                            theme: 'relax',
+                            text: "<%= flash.success %>",
+                            type: 'success',
+                            layout: 'topRight',
+                            timout: 1500
+                        }).show();
+                        
+                    <% } %>
+
+                    // flash message for error message
+                    <% if (flash.error && flash.error.length > 0) { %>
+                        new Noty({
+                            theme: 'relax',
+                            text: "<%= flash.error %>",
+                            type: 'error',
+                            layout: 'topRight',
+                            timout: 1500
+                        }).show();
+                        
+                    <% } %>
+                </script>
+
+</body>
+
 </html>
