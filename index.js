@@ -26,15 +26,21 @@ const sassMiddleware = require('node-sass-middleware');
 // require path
 const path = require('path');
 
+//reuire flash library
+const flash = require('connect-flash');
+
+//require customfalsh middleware
+const customMware = require('./config/middleware');
+
 app.use(sassMiddleware({
-    src : './assets/scss',
-    dest : './assets/css',
-    debug : true,
-    outputStyle : 'extended',
-    prefix : '/css'
+    src: './assets/scss',
+    dest: './assets/css',
+    debug: true,
+    outputStyle: 'extended',
+    prefix: '/css'
 }));
 
-app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
@@ -58,12 +64,12 @@ app.set('views', './views');
 app.use(session({
     name: 'codeial',
     // TODO change the secret before deployment in production mode
-    secret:  'blahsomething',
-    saveUninitialized : false,
+    secret: 'blahsomething',
+    saveUninitialized: false,
     resave: false,
-    cookie : {
-        maxAge : (1000 * 60 * 100), //in milisecond
-        autoRemove : 'disabled'
+    cookie: {
+        maxAge: (1000 * 60 * 100), //in milisecond
+        autoRemove: 'disabled'
     },
     // add new key
     // store : new MongoStore ({
@@ -75,7 +81,7 @@ app.use(session({
     // }
     // )
     store: new MongoStore({
-        mongoUrl : 'mongodb://localhost/test-app'
+        mongoUrl: 'mongodb://localhost/test-app'
     })
 
 }));
@@ -85,18 +91,20 @@ app.use(passport.session());
 
 //set up the current user uses
 app.use(passport.setAuthenticatedUser);
+app.use(flash());
+app.use(customMware.setFlash);
 
 // use express router
 app.use('/', require('./routes'));
 
-app.listen(port, function(err){
-    if (err){
+app.listen(port, function (err) {
+    if (err) {
         console.log(`Error in running the server: ${err}`);
     }
 
     console.log(`Server is running at: http://127.0.0.1:8000/`);
-    
-    
+
+
 });
 
 
