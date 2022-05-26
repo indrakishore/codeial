@@ -1,15 +1,15 @@
-<li>
+<li id="post-<%= post._id%>">
     <p>
-        <% if(locals.user && locals.user.id == post.user.id){%>
-        <small>
-            <a href="/posts/destroy/<%= post.id %>">X</a>
-        </small>
-        <%}%>
-        <%= post.content %>
-        <br>
-        <small>
-            <%= post.user.name %>
-        </small>
+        <% if(locals.user && locals.user.id==post.user.id){%>
+            <small>
+                <a class="delete-post-button" href="/posts/destroy/<%= post.id %>">X</a>
+            </small>
+            <%}%>
+                <%= post.content %>
+                    <br>
+                    <small>
+                        <%= post.user.name %>
+                    </small>
     </p>
     <div class="post-comments">
         <% if(locals.user){ %>
@@ -18,16 +18,16 @@
                 <input type="hidden" name="post" value="<%= post._id%>">
                 <input type="submit" value="Add comment">
             </form>
-        <% } %>
+            <% } %>
 
-        <div class="post-comments-list">
-            <ul id="post-comments-<%=post._id %>">   
-                <% for(comment of post.comments){%>
-                    
-                    <%-include('_comment.ejs')-%>
+                <div class="post-comments-list">
+                    <ul id="post-comments-<%=post._id %>">
+                        <% for(comment of post.comments){%>
 
-                <%}%>   
-            </ul>
-        </div>
+                            <%-include('_comment.ejs')-%>
+
+                                <%}%>
+                    </ul>
+                </div>
     </div>
 </li>
