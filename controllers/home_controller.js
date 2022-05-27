@@ -12,6 +12,8 @@ module.exports.home = async function(req, res){
     //handle error using try catch
     try{
         let posts = await Post.find({})
+        // sort the post in reverse-chronological order
+        .sort('-createdAt')
         .populate('user')
         .populate({
             path: 'comments',
