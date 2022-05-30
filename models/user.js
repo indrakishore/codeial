@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     name:{
         type : String,
         required : true
+    },
+    avatar : {
+      type: String
     }
 }, {
     timestamps : true
@@ -26,7 +29,7 @@ const userSchema = new mongoose.Schema({
 //add from multer doc
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, '..'+AVATAR_PATH))
+      cb(null, path.join(__dirname, '..', AVATAR_PATH))
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
