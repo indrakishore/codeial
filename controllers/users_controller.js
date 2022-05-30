@@ -16,13 +16,43 @@ module.exports.profile = function(req, res){
     
 }
 
-module.exports.update = function(req, res){
+module.exports.update = async function(req, res){
     // if current looged in user
+    // if(req.user.id == req.params.id){
+    //     User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
+    //         req.flash('success', 'Updated');
+    //         return res.redirect('back');
+    //     });
+    // }else{
+    //     req.flash('error', 'Unauthorized!');
+    //     return res.status(401).send('Unauthorised');
+    // }
     if(req.user.id == req.params.id){
-        User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
+        try{
+            let user = await User.findById(req.params.id);//find user then update
+            User.uploadedAvatar(req, res, function(err){
+                if(err){
+                    console.log('Multer error:', err)
+                }
+                // need to store file along user name
+                user.name = req.body.name;
+                user.email = req.body.email;
+
+                if(req.file){
+                    // this is saving the of the uploaded file into the avatar field in the user
+                    user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                user.save();
+                return res.redirect('back');
+                console.log(req.file);
+            })
+
+        }catch(err){
+            req.flash('error', err);
             return res.redirect('back');
-        });
+        }
     }else{
+        req.flash('error', 'Unauthorized!');
         return res.status(401).send('Unauthorised');
     }
 }
