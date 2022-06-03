@@ -3,6 +3,9 @@
 //     res.end('<h1>User Profile</h1>');
 // }
 const User = require('../models/user'); 
+const fs = require('fs');
+const path = require('path');
+
 // let's keep it same as before bcause there is no nexting level just one call back available here.
 module.exports.profile = function(req, res){
     // return res.end('<h1> Express is up for codeial! </h1>');
@@ -39,6 +42,15 @@ module.exports.update = async function(req, res){
                 user.email = req.body.email;
 
                 if(req.file){
+                    // check if the user avatar already associated with him, then remove that avatar and updated with new one
+                    if(user.avatar){
+                        //delete the avatar
+                        fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+                    }
+                    
+                    // Error occured due to there is no file link to the user and it stops here
+                    //comment --> upload image --> uncomment --> working fine
+                    
                     // this is saving the of the uploaded file into the avatar field in the user
                     user.avatar = User.avatarPath + '/' + req.file.filename;
                 }
