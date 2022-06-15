@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
 
-
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
@@ -14,24 +13,25 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-let renderTemplate = (data, relativePath) => {
-    let mailHTML;
+let renderTemplate = (data, relativePath, callback) => {
+    // let mailHTML;
     console.log("***********INSIDE renderTemplate. DATA: ", data);
-    ejs.render(
-        path.join(__dirname, '../views/mailers', relativePath),
+    let pp = path.join(__dirname, '../views/mailers', relativePath);
+    console.log('path' + pp);
+    ejs.renderFile(
+        pp,
         data,
         function(err, template) {
             if(err){
                 console.log('error in rendering template', err);
                 return;
             }
-
-            mailHTML = template;
-            
+            console.log("here" + template);
+            return callback(template);
         }
     )
-    console.log("***********INSIDE renderTemplate. DATA: ", mailHTML);
-    return mailHTML;
+    // console.log("***********INSIDE renderTemplate. mailDATA: ", mailHTML);
+    // return mailHTML;
 }
 
 module.exports = {
