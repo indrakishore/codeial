@@ -17,8 +17,8 @@ exports.newComment = (comment) => {
         from: "indrakishore.mca19.du@gmail.com",
         to: comment.user.email,
         subject: "New Comment Published!",
-        // html: '<h1> yup, your comment is now published!</h1>'
-        html: htmlString
+        html: "Your comment got published!",
+        // yet to add htmlString over here 
     }, (err, info) => {
         if(err){
             console.log('Error in sending mail', err);

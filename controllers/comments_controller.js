@@ -3,6 +3,9 @@ const Post = require('../models/post');
 const commentsMailer = require('../mailers/comments_mailer');
 const queue = require('../config/kue');
 const commentEmailWorker = require('../workers/comment_email_worker');
+const { populate } = require('../models/comment');
+
+const User = require('../models/user');
 
 
 
@@ -13,6 +16,9 @@ module.exports.create = async function (req, res) {
     try {   
         let post = await Post.findById(req.body.post);
         // if post found
+
+        // console.log("************ Inside create - comments controller. Post: ", post);
+
         if (post) {
             let comment = await Comment.create({
                 content: req.body.content,
@@ -21,8 +27,18 @@ module.exports.create = async function (req, res) {
             });
             post.comments.push(comment);
             post.save();
+
+            // console.log("************ Inside if(post) - comments controller. Comment: ", comment);
             
-            comment = await comment.populate('user', 'name email').execPopulate();
+            //comment = await comment.populate('user', 'name email').execPopulate();
+            comment = await comment.populate({
+                path: 'user',
+                model: 'User',
+                select: 'name email'                
+            });
+
+            // console.log("************ Inside if(post) - comments controller. Comment: ", comment);
+
             commentsMailer.newComment(comment);
             // let job = queue.create('emails', comment).save(function(err){
             //     if(err){
@@ -31,6 +47,8 @@ module.exports.create = async function (req, res) {
             //     }
             //     console.log('job enqueued', job.id);
             // });
+
+            // console.log("************ Inside if(post) - comments controller. AFTER COMMENTS MAILER ");
 
             if (req.xhr){
                 return res.status(200).json({
@@ -41,6 +59,7 @@ module.exports.create = async function (req, res) {
                 });
             }
 
+            // console.log("************ Inside if(post) - comments controller. AFTER REQ.XHR ");
 
             req.flash('success', 'Comment published!');
 
