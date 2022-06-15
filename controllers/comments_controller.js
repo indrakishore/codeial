@@ -1,11 +1,16 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
+const commentsMailer = require('../mailers/comments_mailer');
+const queue = require('../config/kue');
+const commentEmailWorker = require('../workers/comment_email_worker');
+
+
 
 // async await
 module.exports.create = async function (req, res) {
     // create comment over the post (can be fiddle with website)
     // post found, comment found, 
-    try {
+    try {   
         let post = await Post.findById(req.body.post);
         // if post found
         if (post) {
@@ -16,14 +21,47 @@ module.exports.create = async function (req, res) {
             });
             post.comments.push(comment);
             post.save();
-            res.redirect('/');
-        };
-    } catch (err) {
+            
+            comment = await comment.populate('user', 'name email').execPopulate();
+            commentsMailer.newComment(comment);
+            // let job = queue.create('emails', comment).save(function(err){
+            //     if(err){
+            //         console.log('error in sending to the queue', err);
+            //         return;
+            //     }
+            //     console.log('job enqueued', job.id);
+            // });
 
-        console.log("Error", err);
+            if (req.xhr){
+                return res.status(200).json({
+                    data: {
+                        comment: comment
+                    },
+                    message: "Post created!"
+                });
+            }
+
+
+            req.flash('success', 'Comment published!');
+
+            res.redirect('/');
+        }
+    }catch(err){
+        req.flash('error', err);
         return;
     }
+    
 }
+//             post.save();
+
+//             res.redirect('/');
+//         };
+//     } catch (err) {
+
+//         console.log("Error", err);
+//         return;
+//     }
+// }
 
 // module.exports.create = function(req, res){
 //     // create comment over the post (can be fiddle with website)

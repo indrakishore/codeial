@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const port = 8000;
+const port = 8080;
 
 //require express js layout library
 const expressLayouts = require('express-ejs-layouts');
@@ -15,8 +15,10 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
-const bodyParser = require('body-parser');
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 
+
+const bodyParser = require('body-parser');
 
 // MongoStore
 const MongoStore = require('connect-mongo');
@@ -108,7 +110,7 @@ app.listen(port, function (err) {
         console.log(`Error in running the server: ${err}`);
     }
 
-    console.log(`Server is running at: http://127.0.0.1:8000/`);
+    console.log(`Server is running at: http://127.0.0.1:8080/`);
 
 
 });

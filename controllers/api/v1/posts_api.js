@@ -31,7 +31,7 @@ module.exports.destroy = async function (req, res) {
         // first find post exist in DB or not
         let post = await Post.findById(req.params.id);
         // checking the post user is matching with same user
-        // if (post.user == req.user.id) {
+        if (post.user == req.user.id) {
             post.remove();
             // deleting the comment associated with
             await Comment.deleteMany({ post: req.params.id });
@@ -44,7 +44,12 @@ module.exports.destroy = async function (req, res) {
 
             return res.status(200).json({
                 message: "Post and associated comments deleted successfully!"
-            })
+            });
+        }else{
+            return es.status(200).json({
+                message: "You can't delete this post.,mnbgvcfd  sdert!"
+            });
+        }
         // } else {
         //     req.flash('error', 'You cannot delete this post');
         //     return res.redirect('back');
