@@ -9,15 +9,15 @@ let transporter = nodemailer.createTransport({
     secure: false,
     auth: {
         user: 'indrakishore.mca19.du@gmail.com', //change later
-        pass: 'nupzhfpmxdaebrwu'//write valid pwd
+        pass: 'tysnwuapirxcsytp'//write valid pwd
     }
 });
 
 let renderTemplate = (data, relativePath, callback) => {
     // let mailHTML;
-    console.log("***********INSIDE renderTemplate. DATA: ", data);
+    // console.log("***********INSIDE renderTemplate. DATA: ", data);
     let pp = path.join(__dirname, '../views/mailers', relativePath);
-    console.log('path' + pp);
+    // console.log('path' + pp);
     ejs.renderFile(
         pp,
         data,
@@ -26,7 +26,7 @@ let renderTemplate = (data, relativePath, callback) => {
                 console.log('error in rendering template', err);
                 return;
             }
-            console.log("here" + template);
+            // console.log("here" + template);
             return callback(template);
         }
     )

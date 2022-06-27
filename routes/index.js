@@ -1,10 +1,11 @@
 // import express
 
 const express = require('express');
+const router = express.Router();
 
 console.log('router loaded');
 
-const router = express.Router();
+
 
 // how to access it.
 const homeController = require('../controllers/home_controller');
@@ -17,6 +18,7 @@ router.get('/profile', usersController.profile);
 router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));//require post route
 router.use('/comments', require('./comments'));
+router.use('/likes', require('./likes'));
 
 //api
 router.use('/api', require('./api'));

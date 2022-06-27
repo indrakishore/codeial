@@ -10,7 +10,7 @@ exports.newComment = (comment) => {
     console.log("Hello");
     // console.log('inside newComment mailer');
     console.log('inside newComment mailer', comment);
-//     // template
+    // template
     nodemailer.renderTemplate({comment: comment}, '/comments/new_comment.ejs', function (data) {
         nodemailer.transporter.sendMail({
             from: "indrakishore.mca19.du@gmail.com",
@@ -25,7 +25,7 @@ exports.newComment = (comment) => {
                 return;
             }
     
-            console.log("Meassage sent", info);
+            // console.log("Meassage sent", info);
             return;
         });
     });
@@ -47,3 +47,4 @@ exports.newComment = (comment) => {
     //     return;
     // });
 }
+

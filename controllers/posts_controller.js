@@ -1,6 +1,7 @@
 // post is belonging to post schema
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const Like = require('../models/like');
 
 // Convert in async await
 module.exports.create = async function (req, res) {
@@ -53,6 +54,12 @@ module.exports.destroy = async function (req, res) {
         let post = await Post.findById(req.params.id);
         // checking the post user is matching with same user
         if (post.user == req.user.id) {
+
+            // CHANGE: delete the associated likes for the post and all its comments, likes too
+            await Like.deleteMany({likeable: post, onModel: 'Post'});
+            await Like.deleteMany({_id: {$in: post.comments}});
+
+            
             post.remove();
             // deleting the comment associated with
             await Comment.deleteMany({ post: req.params.id });

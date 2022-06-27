@@ -3,6 +3,7 @@
 </h1> -->
 
 <link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/chat_box.css">
 
 <div id="home-container">
     <!-- feed post -->
@@ -39,10 +40,41 @@
             </p>
             <% } %>
     </section>
+
+    <!-- importing chat box -->
+    <%- include('_chat_box')-%>
 </div>
 
 <!-- got to route and change the profile -->
 <!-- then user_controller- profile -->
 
+<!-- importing this script for creating the comments -->
+<script src="/js/home_post_comments.js" ></script>
 <!-- include jquery ajax script -->
 <script src="/js/home_posts.js"></script>
+
+<!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="js/toggle_likes.js"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self = this;
+        let toggleLike = new ToggleLike(self);
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<!-- 2.2.0 -->
+<script src="/js/chat_engine.js"></script>
+
+<% if(locals.user){ %>
+<script>
+    new ChatEngine('user-chat-box', '<%= locals.user.email%>')
+</script>   
+<%}%>
+
+
+<!-- <% if (locals.user){ %>
+    <script>
+        const chatClass =  new ChatEngine('user-chat-box', '<%= locals.user.email %>', '<%= locals.user.id %>', '<%= locals.user.name %>');
+    </script>
+<% } %> -->

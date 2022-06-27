@@ -11,6 +11,7 @@ module.exports.home = async function(req, res){
 
     //handle error using try catch
     try{
+        // CHANGE: populate the likes of each post and comment
         let posts = await Post.find({})
         // sort the post in reverse-chronological order
         .sort('-createdAt')
@@ -19,8 +20,13 @@ module.exports.home = async function(req, res){
             path: 'comments',
             populate:{          //populate further
                 path: 'user'
+            },
+            // Add
+            populate: {
+                path: 'likes'
             }
-        });
+        }).populate('likes');
+
         // once this post part gets executed then this users part get exexuted
         let users = await User.find({});
         //then return something to the browser

@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const port = 8080;
+const port = 8040;
 
 //require express js layout library
 const expressLayouts = require('express-ejs-layouts');
@@ -34,6 +34,24 @@ const flash = require('connect-flash');
 
 //require customfalsh middleware
 const customMware = require('./config/middleware');
+
+// setup the chat server to be used with socket.io
+const chatServer = require('http').Server(app);
+
+// Add new lines for current versions
+// const chatServer = require('http').createServer(app);
+// const options = {
+//     cors: {
+//         origin: "http://localhost:8040",
+//         methods: ["GET", "POST"]
+//     }
+// }
+
+// const chatSockets = require('./config/chat_sockets').chatSockets(chatServer, options);
+const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+chatServer.listen(5000, function(){
+    console.log('chat server is listening on the port: 5000');
+});
 
 app.use(sassMiddleware({
     src: './assets/scss',
@@ -110,9 +128,7 @@ app.listen(port, function (err) {
         console.log(`Error in running the server: ${err}`);
     }
 
-    console.log(`Server is running at: http://127.0.0.1:8080/`);
-
-
+    console.log(`Server is running at: http://127.0.0.1:8040/`);
 });
 
 
