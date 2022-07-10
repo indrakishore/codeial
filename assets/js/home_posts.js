@@ -1,4 +1,8 @@
+import * as PostComments from './home_post_comment.js';
+
 {
+    //const PostComments = require('./home_post_comment') ;
+        
     // Method to submit the form data for new post using AJAX
     let createPost = function () {
         // let get form here from home.ejs

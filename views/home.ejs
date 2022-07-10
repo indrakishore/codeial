@@ -49,9 +49,9 @@
 <!-- then user_controller- profile -->
 
 <!-- importing this script for creating the comments -->
-<script src="/js/home_post_comments.js" ></script>
+<script  type="module" src="/js/home_post_comments.js" ></script>
 <!-- include jquery ajax script -->
-<script src="/js/home_posts.js"></script>
+<script type="module" src="/js/home_posts.js"></script>
 
 <!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
 <script src="js/toggle_likes.js"></script>
@@ -62,8 +62,9 @@
     });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script> -->
 <!-- 2.2.0 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/js/chat_engine.js"></script>
 
 <% if(locals.user){ %>
@@ -71,10 +72,3 @@
     new ChatEngine('user-chat-box', '<%= locals.user.email%>')
 </script>   
 <%}%>
-
-
-<!-- <% if (locals.user){ %>
-    <script>
-        const chatClass =  new ChatEngine('user-chat-box', '<%= locals.user.email %>', '<%= locals.user.id %>', '<%= locals.user.name %>');
-    </script>
-<% } %> -->

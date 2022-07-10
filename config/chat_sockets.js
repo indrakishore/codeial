@@ -1,12 +1,5 @@
-// new lines
-// const clientSocketIds = require('../socket');
-
-// module.exports.chatSockets = function(socketServer, options){
-module.exports.chatSockets = function(socketServer){
-
-    // receive a req connection for connection
-    let io = require('socket.io')(socketServer);
-    // let io = require('socket.io')(socketServer, options);
+module.exports.chatSockets = function(socketServer, options){
+     let io = require('socket.io')(socketServer, options);
 
     io.sockets.on('connection', function(socket){
         console.log('new connection received', socket.id);

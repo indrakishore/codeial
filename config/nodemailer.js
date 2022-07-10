@@ -21,9 +21,9 @@ let renderTemplate = (data, relativePath, callback) => {
     ejs.renderFile(
         pp,
         data,
-        function(err, template) {
-            if(err){
-                console.log('error in rendering template', err);
+        function (err, template) {
+            if (err) {
+                console.log('error in rendering template', err); 
                 return;
             }
             // console.log("here" + template);
@@ -35,6 +35,6 @@ let renderTemplate = (data, relativePath, callback) => {
 }
 
 module.exports = {
-    transporter : transporter,
-    renderTemplate : renderTemplate
+    transporter: transporter,
+    renderTemplate: renderTemplate
 }

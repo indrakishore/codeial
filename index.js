@@ -1,8 +1,11 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+
 
 const app = express();
-const port = 8040;
+dotenv.config();
+const port = process.env.PORT;
 
 //require express js layout library
 const expressLayouts = require('express-ejs-layouts');
@@ -36,21 +39,21 @@ const flash = require('connect-flash');
 const customMware = require('./config/middleware');
 
 // setup the chat server to be used with socket.io
-const chatServer = require('http').Server(app);
+// const chatServer = require('http').Server(app);
 
 // Add new lines for current versions
-// const chatServer = require('http').createServer(app);
-// const options = {
-//     cors: {
-//         origin: "http://localhost:8040",
-//         methods: ["GET", "POST"]
-//     }
-// }
+const chatServer = require('http').createServer(app);
+const options = {
+    cors: {
+        origin: `http://localhost:${port}`,
+        methods: ["GET", "POST"]
+    }
+}
 
-// const chatSockets = require('./config/chat_sockets').chatSockets(chatServer, options);
-const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+const chatSockets = require('./config/chat_sockets').chatSockets(chatServer, options);
+// const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000, function(){
-    console.log('chat server is listening on the port: 5000');
+    console.log(`chat server is listening on the port: ${port}`);
 });
 
 app.use(sassMiddleware({
@@ -99,7 +102,7 @@ app.use(session({
     },
     // add new key
     // store : new MongoStore ({
-    //     mongooseConnection : db,
+    //     mongooseConnection : db,`
     //     autoRemove : 'disabled'
     // },
     // function(err){
@@ -107,7 +110,7 @@ app.use(session({
     // }
     // )
     store: new MongoStore({
-        mongoUrl: 'mongodb://localhost/test-app'
+        mongoUrl: 'mongodb+srv://indra:indrakk@cluster0.cwwcbst.mongodb.net/?retryWrites=true&w=majority'
     })
 
 }));
@@ -128,42 +131,5 @@ app.listen(port, function (err) {
         console.log(`Error in running the server: ${err}`);
     }
 
-    console.log(`Server is running at: http://127.0.0.1:8040/`);
+    console.log(`Server is running at: http://127.0.0.1:${port}/`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const { path } = require('express/lib/application');
-// const app = express();
-
-// const port = 8001;
-
-// //use express router
-// app.use('/', require('./routes'))
-
-// //set up the view engine
-// app.set('view engine', 'ejs');
-// app.set('views', './views')
-
-
-// app.listen(port, function(err){
-//     if(err){
-//         // console.log('Error ', err);
-//         // Interpolation
-//         console.log(`Error in running the server: ${err}`);
-//     }
-
-//     console.log(`Server is running on the port: ${port}`);
-// });
-
-// File Structure onwards
