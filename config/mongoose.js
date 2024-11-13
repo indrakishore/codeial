@@ -1,18 +1,26 @@
-// First install mongoose (npm install mongoose)
 const mongoose = require('mongoose');
 
-// connect with mongodb
-mongoose.connect(process.env.MONGO_URI);    
+// Suppress deprecation warning for strictQuery
+mongoose.set('strictQuery', false);
+
+// Connect with mongodb
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});    
 
 const db = mongoose.connection;
 
-//if error occured
+// If an error occurs during the connection
 db.on('error', console.error.bind(console, "Error connecting to MongoDB"));
 
-//if connection is open
+// Once the connection is open, log success message
 db.once('open', function(){
     console.log('Connected to Database :: MongoDB');
 });
 
-//made module usable (place in idex.js.. require)
-module.exports = db;
+// Export the MongoClient from mongoose to be used in the session store
+module.exports = {
+    client: db.client,  // Access the MongoClient instance
+    db: db
+};

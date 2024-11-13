@@ -1,59 +1,54 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
-
+require('dotenv').config(); // This loads variables from .env file
 
 const app = express();
-dotenv.config();
 const port = process.env.PORT;
 
-//require express js layout library
+// require express js layout library
 const expressLayouts = require('express-ejs-layouts');
 
-//import db (look into same neighbour)
+// import db (mongoose connection)
 const db = require('./config/mongoose');
+const mongoose = require('mongoose');  // <-- Ensure mongoose is imported
 
-//used for session cookie
+// used for session cookie
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
 
-
 const bodyParser = require('body-parser');
 
 // MongoStore
 const MongoStore = require('connect-mongo');
 
-//sass-middleware
+// sass-middleware
 const sassMiddleware = require('node-sass-middleware');
 
 // require path
 const path = require('path');
 
-//reuire flash library
+// require flash library
 const flash = require('connect-flash');
 
-//require customfalsh middleware
+// require custom flash middleware
 const customMware = require('./config/middleware');
 
 // setup the chat server to be used with socket.io
-// const chatServer = require('http').Server(app);
-
-// Add new lines for current versions
 const chatServer = require('http').createServer(app);
 const options = {
     cors: {
         origin: `http://localhost:${port}`,
         methods: ["GET", "POST"]
     }
-}
+};
 
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer, options);
-// const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+
 chatServer.listen(5000, function(){
-    console.log(`chat server is listening on the port: ${port}`);
+    console.log(`Chat server is listening on the port: ${port}`);
 });
 
 app.use(sassMiddleware({
@@ -65,65 +60,73 @@ app.use(sassMiddleware({
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(cookieParser());
 
-// app.use(express.static('./assets'));
 app.use(express.static(path.join(__dirname, 'assets')));
 
 // Make the uploads path available to the browser
-// app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
-
 app.use(expressLayouts);
-
 
 // extract style and scripts from sub pages into the layout
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
-
-
 // set up the view engine
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-//mongostore is used to store the cookie
+// const mongoose = require('mongoose');
+
+// Try to connect to MongoDB using the connection URL
+// const mongoose = require('mongoose');
+console.log('Mongo URI:', process.env.MONGO_URI);  // This will help you see the value
+
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
+    console.log('MongoDB connected successfully');
+})
+.catch((err) => {
+    console.error('MongoDB connection error:', err);
+});
+
+
+
+// console.log('Session Secret:', process.env.SESSION_SECRET);
+// console.log('Port:', process.env.PORT);
+
+
+
+// MongoStore is used to store the session in the database
 app.use(session({
     name: 'codeial',
-    // TODO change the secret before deployment in production mode
-    secret: 'blahsomething',
+    secret: process.env.SESSION_SECRET, // Set your secret in the .env file
     saveUninitialized: false,
     resave: false,
     cookie: {
-        maxAge: (1000 * 60 * 100), //in milisecond
+        maxAge: (1000 * 60 * 100), // in milliseconds
         autoRemove: 'disabled'
     },
-    // add new key
-    // store : new MongoStore ({
-    //     mongooseConnection : db,`
-    //     autoRemove : 'disabled'
-    // },
-    // function(err){
-    //     console.log(err || 'connect-mongodb setup ok');
-    // }
-    // )
-    store: new MongoStore({
-        mongoUrl: 'mongodb+srv://indra:indrakk@cluster0.cwwcbst.mongodb.net/?retryWrites=true&w=majority'
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,  // Directly pass the MongoDB URI from your .env file
+        dbName: 'your-db-name',  // Optional: specify your database name if needed
+        autoRemove: 'disabled'
     })
-
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-//set up the current user uses
+// Set up the current user uses
 app.use(passport.setAuthenticatedUser);
 app.use(flash());
 app.use(customMware.setFlash);
 
-// use express router
+// Use express router
 app.use('/', require('./routes'));
 
 app.listen(port, function (err) {
